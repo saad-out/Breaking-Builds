@@ -12,7 +12,8 @@ pipeline {
             steps {
                 echo 'Building..'
                 sh '''
-                make build
+                # make build
+	            pip install -r requirements.txt
                 '''
             }
         }
@@ -20,7 +21,8 @@ pipeline {
             steps {
                 echo 'Testing..'
                 sh '''
-                make test
+                # make test
+	            python3 test.py
                 '''
             }
         }
@@ -28,7 +30,8 @@ pipeline {
             steps {
                 echo 'Deploying....'
                 sh '''
-                make deploy
+                # make deploy
+	            echo "Mock deploy"
                 '''
             }
         }
