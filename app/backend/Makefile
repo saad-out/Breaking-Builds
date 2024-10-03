@@ -1,7 +1,7 @@
 # run app.py flask app
 
 run:
-	python3 app.py
+	python3 main.py
 
 build:
 	pip install -r requirements.txt
