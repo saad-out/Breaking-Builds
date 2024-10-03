@@ -12,7 +12,7 @@ logging.basicConfig(level=logging.INFO)
 
 @routes_bp.route('/trigger-build', methods=['POST'])
 def trigger_build():
-    res: dict = {"status": None, "body": None}
+    res: dict = {"status": -1, "body": {}}
 
     # Trigger the build
     try:
@@ -30,7 +30,7 @@ def trigger_build():
     # Construct response
     build_url = f"{server.server}job/{PIPELINE_NAME}/{build_number}"
     res["status"] = "success"
-    res["info"] = {"build_number": build_number, "build_url": build_url, "name": PIPELINE_NAME}
+    res["body"]["info"] = {"build_number": build_number, "build_url": build_url, "name": PIPELINE_NAME}
 
     # Log successfull build trigger
     logger.info(f"Build triggered for pipeline: {PIPELINE_NAME}, Build number: {build_number}")
