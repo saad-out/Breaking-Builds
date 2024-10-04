@@ -2,7 +2,13 @@ from flask import Blueprint, jsonify
 from jenkins import JenkinsException
 import logging
 
-from jenkins_api import server, PIPELINE_NAME , get_build_stages, get_stage_steps
+from jenkins_api import (
+    server,
+    PIPELINE_NAME,
+    get_build_stages,
+    get_stage_steps,
+    get_step_logs
+)
 
 routes_bp = Blueprint('routes_bp', __name__)
 logger = logging.getLogger(__name__)
@@ -103,7 +109,7 @@ def get_stages(build_number: int):
 
     return jsonify(res), 200
 
-@routes_bp.route('/build-stages/<int:build_number>/stage/<int:stage_number>/steps', methods=['GET'])
+@routes_bp.route('/build-stages/<int:build_number>/stages/<int:stage_number>/steps', methods=['GET'])
 def get_steps(build_number: int, stage_number: int):
     res: dict = {"status": '', "body": {}}
 
@@ -133,5 +139,25 @@ def get_steps(build_number: int, stage_number: int):
 
     # Log stage steps
     logger.info(f"Stage steps for build: {build_number}, stage: {stage_number} are {steps_info}")
+
+    return jsonify(res), 200
+
+@routes_bp.route('/build-stages/<int:build_number>/stages/<int:stage_number>/steps/<int:step_number>/logs', methods=['GET'])
+def get_logs(build_number: int, stage_number: int, step_number: int):
+    res: dict = {"status": '', "body": {}}
+
+    # Get the step logs
+    logs = get_step_logs(build_number, stage_number, step_number)
+    if logs is None:
+        res["status"] = "failure"
+        res["body"]["message"] = "Error getting step logs"
+        return jsonify(res), 500
+    
+    # Construct response
+    res["status"] = "success"
+    res["body"]["logs"] = logs
+
+    # Log step logs
+    logger.info(f"Logs for build: {build_number}, stage: {stage_number}, step: {step_number} are {logs}")
 
     return jsonify(res), 200

@@ -57,4 +57,16 @@ def get_stage_steps(build_number: int, stage_number: int):
         return res.json()
     except Exception as e:
         return None
+
+def get_step_logs(build_number: int, stage_number: int, step_number: int):
+    """
+    Get the logs of a step
+    """
+    url = f"{BLUE_OCEAN_URL}/pipelines/{PIPELINE_NAME}/runs/{build_number}/nodes/{stage_number}/steps/{step_number}/log/"
+    try:
+        res = requests.get(url, auth=(JENKINS_USERNAME, JENKINS_PASSWORD))
+        res.raise_for_status()
+        return str(res.text)
+    except Exception as e:
+        return None
     
