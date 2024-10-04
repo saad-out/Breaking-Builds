@@ -1,0 +1,4 @@
+logging format and timing and place in .log files
+return status codes and messages on error (not only 500)
+consider API rate limits for Jenkins and BlueOcean
+limit number of builds for user

@@ -86,6 +86,7 @@ def get_stages(build_number: int):
     for stage in stages:
         stages_info.append(
             {
+                "id": stage.get('id', ''),
                 "type": stage.get('type', ''),
                 "name": stage.get('displayName', ''),
                 "description": stage.get('displayDescription', ''),
@@ -93,7 +94,6 @@ def get_stages(build_number: int):
                 "status": stage.get('result', ''),
                 "start_time": stage.get('startTime', ''),
                 "duration": stage.get('durationInMillis', ''),
-                "steps_endpoint": stage.get('_links', {}).get('steps', {}).get('href', '')
             }
         )
     res["status"] = "success"
