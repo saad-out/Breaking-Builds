@@ -1,4 +1,5 @@
 from jenkins import Jenkins, JenkinsException
+import requests
 from dotenv import load_dotenv
 from os import environ
 from time import sleep
@@ -13,11 +14,12 @@ JENKINS_PASSWORD = environ.get('JENKINS_PASSWORD', '')
 PIPELINE_NAME = environ.get('PIPELINE_NAME', '')
 
 
+JENKINS_URL = f"{JENKINS_URL}:{JENKINS_PORT}"
+BLUE_OCEAN_URL = f"{JENKINS_URL}/blue/rest/organizations/jenkins"
 try:
-    URL = f"{JENKINS_URL}:{JENKINS_PORT}"
-    server = Jenkins(URL, username=JENKINS_USERNAME, password=JENKINS_PASSWORD)
+    server = Jenkins(JENKINS_URL, username=JENKINS_USERNAME, password=JENKINS_PASSWORD)
 except JenkinsException:
-    raise Exception(f"Error conneting to Jenkins server: {URL}")
+    raise Exception(f"Error conneting to Jenkins server: {JENKINS_URL}")
 
 def wait_for_build_to_start(server: Jenkins, queue_id: int, name: str) -> int:
     """
@@ -31,3 +33,16 @@ def wait_for_build_to_start(server: Jenkins, queue_id: int, name: str) -> int:
         except JenkinsException:
             pass
         sleep(1)
+
+def get_build_stages(build_number: int):
+    """
+    Get the stages of a build
+    """
+    url = f"{BLUE_OCEAN_URL}/pipelines/{PIPELINE_NAME}/runs/{build_number}/nodes/"
+    try:
+        res = requests.get(url, auth=(JENKINS_USERNAME, JENKINS_PASSWORD))
+        res.raise_for_status()
+        return res.json()
+    except Exception as e:
+        return None
+    
