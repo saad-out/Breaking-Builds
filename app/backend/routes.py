@@ -2,7 +2,7 @@ from flask import Blueprint, jsonify
 from jenkins import JenkinsException
 import logging
 
-from jenkins_api import server, PIPELINE_NAME , get_build_stages
+from jenkins_api import server, PIPELINE_NAME , get_build_stages, get_stage_steps
 
 routes_bp = Blueprint('routes_bp', __name__)
 logger = logging.getLogger(__name__)
@@ -87,7 +87,6 @@ def get_stages(build_number: int):
         stages_info.append(
             {
                 "id": stage.get('id', ''),
-                "type": stage.get('type', ''),
                 "name": stage.get('displayName', ''),
                 "description": stage.get('displayDescription', ''),
                 "state": stage.get('state', ''),
@@ -101,5 +100,38 @@ def get_stages(build_number: int):
 
     # Log build stages
     logger.info(f"Build stages for build: {build_number} are {stages_info}")
+
+    return jsonify(res), 200
+
+@routes_bp.route('/build-stages/<int:build_number>/stage/<int:stage_number>/steps', methods=['GET'])
+def get_steps(build_number: int, stage_number: int):
+    res: dict = {"status": '', "body": {}}
+
+    # Get the stage steps
+    steps = get_stage_steps(build_number, stage_number)
+    if steps is None:
+        res["status"] = "failure"
+        res["body"]["message"] = "Error getting stage steps"
+        return jsonify(res), 500
+    
+    # Construct response
+    steps_info = []
+    for step in steps:
+        steps_info.append(
+            {
+                "id": step.get('id', ''),
+                "type": step.get('displayName', ''),
+                "content": step.get('displayDescription', ''),
+                "state": step.get('state', ''),
+                "status": step.get('result', ''),
+                "start_time": step.get('startTime', ''),
+                "duration": step.get('durationInMillis', ''),
+            }
+        )
+    res["status"] = "success"
+    res["body"]["steps"] = steps_info
+
+    # Log stage steps
+    logger.info(f"Stage steps for build: {build_number}, stage: {stage_number} are {steps_info}")
 
     return jsonify(res), 200

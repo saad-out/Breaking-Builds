@@ -45,4 +45,16 @@ def get_build_stages(build_number: int):
         return res.json()
     except Exception as e:
         return None
+
+def get_stage_steps(build_number: int, stage_number: int):
+    """
+    Get the steps of a stage
+    """
+    url = f"{BLUE_OCEAN_URL}/pipelines/{PIPELINE_NAME}/runs/{build_number}/nodes/{stage_number}/steps/"
+    try:
+        res = requests.get(url, auth=(JENKINS_USERNAME, JENKINS_PASSWORD))
+        res.raise_for_status()
+        return res.json()
+    except Exception as e:
+        return None
     
