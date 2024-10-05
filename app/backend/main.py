@@ -1,6 +1,7 @@
 from flask import Flask
 from dotenv import load_dotenv
 from os import environ
+import logging
 
 from jenkins_api import server
 from routes import routes_bp
@@ -11,6 +12,15 @@ app = Flask(__name__)
 app.secret_key = environ.get('APP_SECRET_KEY')
 app.url_map.strict_slashes = False
 app.register_blueprint(routes_bp)
+
+# Logging configuration
+logging.basicConfig(
+    filename='app.log',              # The log file name
+    filemode='w',                    #  Write mode
+    level=logging.INFO,              # Log level
+    format='%(asctime)s - %(levelname)s - %(message)s',  # Log format
+    datefmt='%Y-%m-%d %H:%M:%S'      # Date-time format
+)
 
 @app.route('/')
 def hello_world():

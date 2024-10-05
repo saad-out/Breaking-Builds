@@ -11,14 +11,18 @@ from jenkins_api import (
     get_step_logs
 )
 
+# Blueprint for routes
 routes_bp = Blueprint('routes_bp', __name__)
+
+# Get logger instance
 logger = logging.getLogger(__name__)
-logging.basicConfig(level=logging.INFO)
 
 
 @routes_bp.route('/trigger-build', methods=['POST'])
 def trigger_build():
     res: dict = {"status": '', "body": {}}
+
+    logger.info("Attempting to trigger build...")
 
     # Trigger the build
     try:
@@ -26,18 +30,22 @@ def trigger_build():
     except JenkinsException as e:
         res["status"] = "failure"
         res["body"]["message"] = f"Error triggering build: {str(e)}"
+        logger.error(f"Error triggering build: {str(e)}")
         return jsonify(res), 502
     except RequestException as e:
         res["status"] = "failure"
         res["body"]["message"] = f"Network error: {str(e)}"
+        logger.error(f"Network error: {str(e)}")
         return jsonify(res), 502
     except TimeoutError as e:
         res["status"] = "failure"
         res["body"]["message"] = f"Request timeout: {str(e)}"
+        logger.error(f"Request timeout: {str(e)}")
         return jsonify(res), 504
     except Exception as e:
         res["status"] = "failure"
         res["body"]["message"] = f"Unknown error: {str(e)}"
+        logger.error(f"Unknown error: {str(e)}")
         return jsonify(res), 500
 
     # Construct response
@@ -53,24 +61,30 @@ def trigger_build():
 def get_build_queue_state(build_id: int):
     res: dict = {"status": '', "body": {}}
 
+    logger.info(f"Getting build queue state for build: {build_id}...")
+
     # Get the build queue state
     try:
         queue_info = server.get_queue_item(build_id)
     except JenkinsException as e:
         res["status"] = "failure"
         res["body"]["message"] = f"Error getting build queue state: {str(e)}"
+        logger.error(f"Error getting build queue state: {str(e)}")
         return jsonify(res), 502
     except RequestException as e:
         res["status"] = "failure"
         res["body"]["message"] = f"Network error: {str(e)}"
+        logger.error(f"Network error: {str(e)}")
         return jsonify(res), 502
     except TimeoutError as e:
         res["status"] = "failure"
         res["body"]["message"] = f"Request timeout: {str(e)}"
+        logger.error(f"Request timeout: {str(e)}")
         return jsonify(res), 504
     except Exception as e:
         res["status"] = "failure"
         res["body"]["message"] = f"Unknown error: {str(e)}"
+        logger.error(f"Unknown error: {str(e)}")
         return jsonify(res), 500
     
     # Construct response
@@ -97,20 +111,25 @@ def get_build_queue_state(build_id: int):
 def get_stages(build_number: int):
     res: dict = {"status": '', "body": {}}
 
+    logger.info(f"Getting build stages for build: {build_number}...")
+
     # Get the build stages
     try:
         stages = get_build_stages(build_number)
     except RequestException as e:
         res["status"] = "failure"
         res["body"]["message"] = f"Network error: {str(e)}"
+        logger.error(f"Network error: {str(e)}")
         return jsonify(res), 502
     except TimeoutError as e:
         res["status"] = "failure"
         res["body"]["message"] = f"Request timeout: {str(e)}"
+        logger.error(f"Request timeout: {str(e)}")
         return jsonify(res), 504
     except Exception as e:
         res["status"] = "failure"
         res["body"]["message"] = f"Unknown error: {str(e)}"
+        logger.error(f"Unknown error: {str(e)}")
         return jsonify(res), 500
     
     # Construct response
@@ -131,7 +150,7 @@ def get_stages(build_number: int):
     res["body"]["stages"] = stages_info
 
     # Log build stages
-    logger.info(f"Build stages for build: {build_number} are {stages_info}")
+    logger.info(f"Stages for build: {build_number} gotten successfully")
 
     return jsonify(res), 200
 
@@ -139,20 +158,25 @@ def get_stages(build_number: int):
 def get_steps(build_number: int, stage_number: int):
     res: dict = {"status": '', "body": {}}
 
+    logger.info(f"Getting stage steps for build: {build_number}, stage: {stage_number}...")
+
     # Get the stage steps
     try:
         steps = get_stage_steps(build_number, stage_number)
     except RequestException as e:
         res["status"] = "failure"
         res["body"]["message"] = f"Network error: {str(e)}"
+        logger.error(f"Network error: {str(e)}")
         return jsonify(res), 502
     except TimeoutError as e:
         res["status"] = "failure"
         res["body"]["message"] = f"Request timeout: {str(e)}"
+        logger.error(f"Request timeout: {str(e)}")
         return jsonify(res), 504
     except Exception as e:
         res["status"] = "failure"
         res["body"]["message"] = f"Unknown error: {str(e)}"
+        logger.error(f"Unknown error: {str(e)}")
         return jsonify(res), 500
 
     # Construct response
@@ -173,7 +197,7 @@ def get_steps(build_number: int, stage_number: int):
     res["body"]["steps"] = steps_info
 
     # Log stage steps
-    logger.info(f"Stage steps for build: {build_number}, stage: {stage_number} are {steps_info}")
+    logger.info(f"Steps for build: {build_number}, stage: {stage_number} gotten successfully")
 
     return jsonify(res), 200
 
@@ -181,20 +205,25 @@ def get_steps(build_number: int, stage_number: int):
 def get_logs(build_number: int, stage_number: int, step_number: int):
     res: dict = {"status": '', "body": {}}
 
+    logger.info(f"Getting logs for build: {build_number}, stage: {stage_number}, step: {step_number}...")
+
     # Get the step logs
     try:
         logs = get_step_logs(build_number, stage_number, step_number)
     except RequestException as e:
         res["status"] = "failure"
         res["body"]["message"] = f"Network error: {str(e)}"
+        logger.error(f"Network error: {str(e)}")
         return jsonify(res), 502
     except TimeoutError as e:
         res["status"] = "failure"
         res["body"]["message"] = f"Request timeout: {str(e)}"
+        logger.error(f"Request timeout: {str(e)}")
         return jsonify(res), 504
     except Exception as e:
         res["status"] = "failure"
         res["body"]["message"] = f"Unknown error: {str(e)}"
+        logger.error(f"Unknown error: {str(e)}")
         return jsonify(res), 500
     
     # Construct response
@@ -202,6 +231,6 @@ def get_logs(build_number: int, stage_number: int, step_number: int):
     res["body"]["logs"] = logs
 
     # Log step logs
-    logger.info(f"Logs for build: {build_number}, stage: {stage_number}, step: {step_number} are {logs}")
+    logger.info(f"Logs for build: {build_number}, stage: {stage_number}, step: {step_number} gotten successfully")
 
     return jsonify(res), 200
