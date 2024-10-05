@@ -22,3 +22,4 @@ if __name__ == "__main__":
         port=int(environ.get('APP_PORT', 5000)),
         debug=bool(environ.get('APP_DEBUG', False))
     )
+

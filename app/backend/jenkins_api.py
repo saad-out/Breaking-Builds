@@ -1,5 +1,6 @@
 from jenkins import Jenkins, JenkinsException
 import requests
+from requests.exceptions import RequestException
 from dotenv import load_dotenv
 from os import environ
 from time import sleep
@@ -44,7 +45,12 @@ def get_build_stages(build_number: int):
         res.raise_for_status()
         return res.json()
     except Exception as e:
-        return None
+        if type(e) == RequestException:
+            raise RequestException()
+        elif type(e) == TimeoutError:
+            raise TimeoutError()
+        else:
+            raise Exception()
 
 def get_stage_steps(build_number: int, stage_number: int):
     """
@@ -56,7 +62,12 @@ def get_stage_steps(build_number: int, stage_number: int):
         res.raise_for_status()
         return res.json()
     except Exception as e:
-        return None
+        if type(e) == RequestException:
+            raise RequestException()
+        elif type(e) == TimeoutError:
+            raise TimeoutError()
+        else:
+            raise Exception()
 
 def get_step_logs(build_number: int, stage_number: int, step_number: int):
     """
@@ -68,5 +79,10 @@ def get_step_logs(build_number: int, stage_number: int, step_number: int):
         res.raise_for_status()
         return str(res.text)
     except Exception as e:
-        return None
+        if type(e) == RequestException:
+            raise RequestException()
+        elif type(e) == TimeoutError:
+            raise TimeoutError()
+        else:
+            raise Exception()
     

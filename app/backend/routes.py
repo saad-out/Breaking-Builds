@@ -1,5 +1,6 @@
 from flask import Blueprint, jsonify
 from jenkins import JenkinsException
+from requests.exceptions import RequestException
 import logging
 
 from jenkins_api import (
@@ -25,7 +26,15 @@ def trigger_build():
     except JenkinsException as e:
         res["status"] = "failure"
         res["body"]["message"] = f"Error triggering build: {str(e)}"
-        return jsonify(res), 500
+        return jsonify(res), 502
+    except RequestException as e:
+        res["status"] = "failure"
+        res["body"]["message"] = f"Network error: {str(e)}"
+        return jsonify(res), 502
+    except TimeoutError as e:
+        res["status"] = "failure"
+        res["body"]["message"] = f"Request timeout: {str(e)}"
+        return jsonify(res), 504
     except Exception as e:
         res["status"] = "failure"
         res["body"]["message"] = f"Unknown error: {str(e)}"
@@ -50,7 +59,15 @@ def get_build_queue_state(build_id: int):
     except JenkinsException as e:
         res["status"] = "failure"
         res["body"]["message"] = f"Error getting build queue state: {str(e)}"
-        return jsonify(res), 500
+        return jsonify(res), 502
+    except RequestException as e:
+        res["status"] = "failure"
+        res["body"]["message"] = f"Network error: {str(e)}"
+        return jsonify(res), 502
+    except TimeoutError as e:
+        res["status"] = "failure"
+        res["body"]["message"] = f"Request timeout: {str(e)}"
+        return jsonify(res), 504
     except Exception as e:
         res["status"] = "failure"
         res["body"]["message"] = f"Unknown error: {str(e)}"
@@ -81,10 +98,19 @@ def get_stages(build_number: int):
     res: dict = {"status": '', "body": {}}
 
     # Get the build stages
-    stages = get_build_stages(build_number)
-    if stages is None:
+    try:
+        stages = get_build_stages(build_number)
+    except RequestException as e:
         res["status"] = "failure"
-        res["body"]["message"] = "Error getting build stages"
+        res["body"]["message"] = f"Network error: {str(e)}"
+        return jsonify(res), 502
+    except TimeoutError as e:
+        res["status"] = "failure"
+        res["body"]["message"] = f"Request timeout: {str(e)}"
+        return jsonify(res), 504
+    except Exception as e:
+        res["status"] = "failure"
+        res["body"]["message"] = f"Unknown error: {str(e)}"
         return jsonify(res), 500
     
     # Construct response
@@ -114,12 +140,21 @@ def get_steps(build_number: int, stage_number: int):
     res: dict = {"status": '', "body": {}}
 
     # Get the stage steps
-    steps = get_stage_steps(build_number, stage_number)
-    if steps is None:
+    try:
+        steps = get_stage_steps(build_number, stage_number)
+    except RequestException as e:
         res["status"] = "failure"
-        res["body"]["message"] = "Error getting stage steps"
+        res["body"]["message"] = f"Network error: {str(e)}"
+        return jsonify(res), 502
+    except TimeoutError as e:
+        res["status"] = "failure"
+        res["body"]["message"] = f"Request timeout: {str(e)}"
+        return jsonify(res), 504
+    except Exception as e:
+        res["status"] = "failure"
+        res["body"]["message"] = f"Unknown error: {str(e)}"
         return jsonify(res), 500
-    
+
     # Construct response
     steps_info = []
     for step in steps:
@@ -147,10 +182,19 @@ def get_logs(build_number: int, stage_number: int, step_number: int):
     res: dict = {"status": '', "body": {}}
 
     # Get the step logs
-    logs = get_step_logs(build_number, stage_number, step_number)
-    if logs is None:
+    try:
+        logs = get_step_logs(build_number, stage_number, step_number)
+    except RequestException as e:
         res["status"] = "failure"
-        res["body"]["message"] = "Error getting step logs"
+        res["body"]["message"] = f"Network error: {str(e)}"
+        return jsonify(res), 502
+    except TimeoutError as e:
+        res["status"] = "failure"
+        res["body"]["message"] = f"Request timeout: {str(e)}"
+        return jsonify(res), 504
+    except Exception as e:
+        res["status"] = "failure"
+        res["body"]["message"] = f"Unknown error: {str(e)}"
         return jsonify(res), 500
     
     # Construct response
