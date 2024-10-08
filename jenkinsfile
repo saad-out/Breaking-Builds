@@ -22,8 +22,7 @@ pipeline {
                 echo 'Testing..'
                 sh '''
                 cd app/backend
-	            echo "Mock test"
-	            # python3 test.py
+                python3 -m unittest discover
                 '''
             }
         }
