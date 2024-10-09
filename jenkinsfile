@@ -33,7 +33,7 @@ pipeline {
             steps {
                 echo 'Deploying....'
                 sh '''
-                cd app
+                cd app/backend
                 source venv/bin/activate
 	            echo "Mock deploy"
                 '''
