@@ -13,6 +13,8 @@ pipeline {
                 echo 'Building..'
                 sh '''
                 cd app/backend
+                python3 -m venv venv
+                source venv/bin/activate
 	            pip install -r requirements.txt
                 '''
             }
@@ -22,6 +24,7 @@ pipeline {
                 echo 'Testing..'
                 sh '''
                 cd app/backend
+                source venv/bin/activate
                 python3 -m unittest discover
                 '''
             }
@@ -31,6 +34,7 @@ pipeline {
                 echo 'Deploying....'
                 sh '''
                 cd app
+                source venv/bin/activate
 	            echo "Mock deploy"
                 '''
             }
