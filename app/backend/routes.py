@@ -10,6 +10,7 @@ from jenkins_api import (
     get_stage_steps,
     get_step_logs
 )
+from my_utils import write_build_to_json
 
 # Blueprint for routes
 routes_bp = Blueprint('routes_bp', __name__)
@@ -51,6 +52,9 @@ def trigger_build():
     # Construct response
     res["status"] = "success"
     res["body"]["info"] = {"queue_id": queue_item, "name": PIPELINE_NAME}
+
+    # write build to builds.json
+    write_build_to_json()
 
     # Log successfull build trigger
     logger.info(f"Build triggered for pipeline: {PIPELINE_NAME}, Build queue id: {queue_item}")
