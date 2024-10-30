@@ -16,10 +16,13 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  /* justify-content: center; */
   height: 100vh;
   text-align: center;
   color: white;
+  padding-top: 5rem;
+
+  /* border: 10px solid #a3c380; */
 }
 
 .title {
@@ -29,6 +32,7 @@ body {
   text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.8);
   color: #a3c380;
   margin: 0;
+  /* border: 10px solid #a3c380; */
 }
 
 .description {
@@ -45,8 +49,8 @@ body {
   color: white;
   background-color: #4b8673; /* Dark green inspired by Breaking Bad */
   border: none;
-  padding: 12px 54px;
-  margin-top: 2rem;
+  padding: 18px 74px;
+  margin-top: 10rem;
   border-radius: 8px;
   cursor: pointer;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
@@ -62,3 +66,88 @@ body {
   background-color: #355e53;
   transform: scale(0.98);
 }
+
+/* StageCards.css */
+.stage-cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 2rem;
+  gap: 2rem; /* Space between cards */
+}
+
+.stage-card {
+  background-color: #3a695d; /* Dark green background */
+  border-radius: 10px;
+  padding: 20px;
+  width: 200px; /* Set width for cards */
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  text-align: center; /* Center text */
+}
+
+.stage-card:hover {
+  transform: translateY(-5px); /* Lift effect on hover */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.8);
+}
+
+.stage-title {
+  font-family: 'Roboto Slab', sans-serif;
+  font-size: 1.5rem;
+  color: #ffffff; /* White text for title */
+  margin: 0;
+}
+
+/* Modal.css */
+.custom-modal {
+  background-color: #2e4b3a; /* Darker background for the modal */
+  border-radius: 10px;
+  padding: 20px;
+  color: white;
+  width: 80%; /* Width of the modal */
+  max-width: 600px; /* Maximum width */
+  outline: none; /* Remove outline */
+}
+
+.overlay {
+  background-color: rgba(0, 0, 0, 0.8); /* Dark background for overlay */
+}
+
+.modal-title {
+  text-align: center;
+  font-family: 'Roboto Slab', sans-serif;
+  margin-bottom: 1rem;
+}
+
+.modal-content {
+  margin-bottom: 1rem;
+}
+
+.step {
+  margin: 1rem 0;
+  padding: 10px;
+  background-color: #4b8673; /* Similar background for steps */
+  border-radius: 5px;
+}
+
+.close-button {
+  display: block;
+  margin: 0 auto;
+  padding: 10px 20px;
+  background-color: #d9534f; /* Close button color */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: 'Bangers', cursive;
+}
+
+/* Modal.css */
+.step {
+  margin: 1rem 0;
+  padding: 10px;
+  background-color: #4b8673; /* Similar background for steps */
+  border-radius: 5px;
+}
+
