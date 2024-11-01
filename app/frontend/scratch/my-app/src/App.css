@@ -67,6 +67,26 @@ body {
   transform: scale(0.98);
 }
 
+/* App.css or Button.css */
+.button-disabled {
+  font-family: 'Bangers', cursive;
+  font-size: 1.3rem;
+  color: white;
+  background-color: #4b8673; /* Dark green inspired by Breaking Bad */
+  border: none;
+  padding: 18px 74px;
+  margin-top: 10rem;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+  /* transition: background-color 0.3s ease, transform 0.2s ease; */
+
+  pointer-events: none; /* Disables all hover, click, and other pointer interactions */
+  opacity: 0.8; /* Makes the button appear disabled */
+  transform: none; /* Prevents any transform effects */
+  transition: none; /* Disables transition effects */
+}
+
 /* StageCards.css */
 .stage-cards-container {
   display: flex;

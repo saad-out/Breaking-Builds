@@ -6,8 +6,10 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   const [showStages, setShowStages] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleButtonClick = () => {
+    setLoading(true);
     setShowStages(true);
   };
 
@@ -15,8 +17,8 @@ function App() {
     <div className="container">
       <h1 className="title">Breaking Builds</h1>
       <p className="description">Realtime Full CI/CD Pipeline with Jenkins</p>
-      <button className="trigger-button" onClick={handleButtonClick}>
-        Trigger Build
+      <button className={loading ? "button-disabled" : "trigger-button" } onClick={handleButtonClick} disabled={loading}>
+        { loading ? 'Triggering...' : 'Trigger Build' }
       </button>
       {showStages && <StageCards stages={data} />}
     </div>
