@@ -162,3 +162,13 @@ body {
   cursor: pointer;
   font-family: 'Bangers', cursive;
 }
+
+.bash-code-block {
+  background-color: #1e1e1e; /* Dark background color */
+  color: #d4d4d4; /* Light text color */
+  padding: 10px;
+  border-radius: 5px;
+  font-family: 'Courier New', Courier, monospace; /* Monospaced font */
+  overflow-x: auto; /* Scroll horizontally if needed */
+}
+
