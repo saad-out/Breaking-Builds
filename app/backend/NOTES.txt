@@ -2,3 +2,8 @@ logging format and timing and place in .log files
 return status codes and messages on error (not only 500)
 consider API rate limits for Jenkins and BlueOcean
 limit number of builds for user
+
+
+if data persists, then rm volumes (or use new ones)
+to connect with private repo, generate pair keys in jenkins container
+ssh-keyscan github.com >> ~/.ssh/known_hosts and change : Manage Jenkins -> Security -> Known Hosts to First access (or something like that)
