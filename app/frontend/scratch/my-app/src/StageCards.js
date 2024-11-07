@@ -10,7 +10,7 @@ const StageCards = ({ buildNumber, stages }) => {
   const [currentSteps, setCurrentSteps] = useState([]); // TODO: load with initial empty data
 
   const openModal = (stage) => {
-      if (stage['state'] === 'done' && !(stage['id'] in steps)) {
+      if (stage['state'] === 'FINISHED' && !(stage['id'] in steps)) {
           const interval = setInterval(async () => {
               console.log('Fetching stage steps for stage:', stage['id']);
               const data = await getStageSteps(buildNumber, stage['id']);
@@ -21,18 +21,32 @@ const StageCards = ({ buildNumber, stages }) => {
               console.log('steps:', _steps);
               let allDone = true;
               for (let step of _steps) {
-                  if (step['state'] !== 'done') {
+                  if (step['state'] !== 'FINISHED') {
                       allDone = false;
                       break;
                   }
               }
+
               if (allDone) {
-                  steps[stage['id']] = _steps;
-                  setSteps(steps);
-                  clearInterval(interval);
+                // Make a copy of steps and set it with new data
+                setSteps((prevSteps) => {
+                    const updatedSteps = { ...prevSteps, [stage['id']]: _steps };
+                    // Update current steps to trigger re-render for this specific modal
+                    setCurrentSteps(_steps);
+                    return updatedSteps;
+                });
+                clearInterval(interval);
+              } else {
+                setCurrentSteps(_steps);
               }
+
+              // if (allDone) {
+              //     steps[stage['id']] = _steps;
+              //     setSteps(steps);
+              //     clearInterval(interval);
+              // }
           }, 1000);
-      } else if (stage['state'] !== 'done') {
+      } else if (stage['state'] !== 'FINISHED') {
           setCurrentSteps({"done": false});
       }
     setModalIsOpen(true);
@@ -58,7 +72,7 @@ const StageCards = ({ buildNumber, stages }) => {
             return (
             <div key={index} className="stage-card" onClick={() => openModal(_stage)}>
                 <h2 className="stage-title">{stageTitle}</h2>
-                <h5>{stageState}</h5>
+                <h5>{stageState !== null ? stageState : 'waiting'}</h5>
             </div>
             );
         })

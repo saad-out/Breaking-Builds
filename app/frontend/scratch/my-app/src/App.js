@@ -7,6 +7,7 @@ import {
     getBuildQueueState,
     getBuildStages,
 } from './api';
+import Spinner from 'react-bootstrap/Spinner';
 
 
 function App() {
@@ -49,7 +50,7 @@ function App() {
                 setShowStages(true);
                 let allDone = true;
                 for (let stage of data['body']['stages']) {
-                    if (stage['state'] !== 'done') {
+                    if (stage['state'] !== 'FINISHED') {
                         allDone = false;
                         break;
                     }
@@ -70,6 +71,9 @@ function App() {
         <p className="description">Realtime Full CI/CD Pipeline with Jenkins</p>
         <button className={ (triggerButtonState !== 'Trigger') ? "button-disabled" : "trigger-button" } onClick={handleButtonClick} disabled={ (triggerButtonState !== 'Trigger') }>
             { (triggerButtonState === 'Trigger') ? 'Trigger Build 👨‍🍳' : triggerButtonState }
+            {/* <Spinner animation="border" role="status"> */}
+            {/*     <span className="visually-hidden">Loading...</span> */}
+            {/* </Spinner> */}
         </button>
         {showStages && <StageCards buildNumber={buildNumber} stages={stages} />}
         </div>

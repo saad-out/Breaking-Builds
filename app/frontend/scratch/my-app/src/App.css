@@ -97,6 +97,7 @@ body {
 }
 
 .stage-card {
+  font-family: 'Bangers', cursive;
   background-color: #3a695d; /* Dark green background */
   border-radius: 10px;
   padding: 20px;
@@ -113,7 +114,8 @@ body {
 }
 
 .stage-title {
-  font-family: 'Roboto Slab', sans-serif;
+  /* font-family: 'Roboto Slab', sans-serif; */
+  /* font-family: 'Bangers', cursive; */
   font-size: 1.5rem;
   color: #ffffff; /* White text for title */
   margin: 0;
@@ -121,6 +123,7 @@ body {
 
 /* Modal.css */
 .custom-modal {
+  font-family: 'Bangers', cursive;
   background-color: #2e4b3a; /* Darker background for the modal */
   border-radius: 10px;
   padding: 20px;
@@ -136,7 +139,7 @@ body {
 
 .modal-title {
   text-align: center;
-  font-family: 'Roboto Slab', sans-serif;
+  /* font-family: 'Roboto Slab', sans-serif; */
   margin-bottom: 1rem;
 }
 

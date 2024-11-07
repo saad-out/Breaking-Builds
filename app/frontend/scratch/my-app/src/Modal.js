@@ -44,6 +44,7 @@ const CustomModal = ({ buildNumber, isOpen, onRequestClose, steps }) => {
     }
   };
 
+    console.log("THe steps are: ", steps);
 
   return (
     <Modal show={isOpen} onHide={onRequestClose} centered>
@@ -59,10 +60,15 @@ const CustomModal = ({ buildNumber, isOpen, onRequestClose, steps }) => {
           {steps.map((step, index) => {
             return (
               <div key={index} className="step">
-                <h5>{step["name"]}</h5>
+                <h5>{step["type"]}</h5>
                 <p>{"state: " + step['state']}</p>
                 <p>{"start_time: " + step['start_time']}</p>
-                <p>{"duration: " + step['duration']}</p>
+                <p>{"duration: " + step['duration'] + " seconds"}</p>
+                {/* <p>{"content: " + step['content']}</p> */}
+                {/* Bash-style code block for logs */}
+                <pre className="bash-code-block">
+                    <code>{step['content']}</code>
+                </pre>
 
                 {/* "View Logs" link that opens logs in a new tab */}
                 <button
