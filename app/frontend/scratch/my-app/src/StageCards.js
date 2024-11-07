@@ -12,13 +12,11 @@ const StageCards = ({ buildNumber, stages }) => {
   const openModal = (stage) => {
       if (stage['state'] === 'FINISHED' && !(stage['id'] in steps)) {
           const interval = setInterval(async () => {
-              console.log('Fetching stage steps for stage:', stage['id']);
               const data = await getStageSteps(buildNumber, stage['id']);
               let _steps = data['body']['steps'];
               _steps["stageId"] = stage['id'];
               _steps["done"] = true;
               setCurrentSteps(_steps);
-              console.log('steps:', _steps);
               let allDone = true;
               for (let step of _steps) {
                   if (step['state'] !== 'FINISHED') {
@@ -48,6 +46,8 @@ const StageCards = ({ buildNumber, stages }) => {
           }, 1000);
       } else if (stage['state'] !== 'FINISHED') {
           setCurrentSteps({"done": false});
+      } else {
+          setCurrentSteps(steps[stage['id']]);
       }
     setModalIsOpen(true);
   };
@@ -70,7 +70,7 @@ const StageCards = ({ buildNumber, stages }) => {
             };
 
             return (
-            <div key={index} className="stage-card" onClick={() => openModal(_stage)}>
+            <div key={index} className="stage-card" onClick={() => openModal(_stage)} disabled={stageState !== 'FINISHED'}>
                 <h2 className="stage-title">{stageTitle}</h2>
                 <h5>{stageState !== null ? stageState : 'waiting'}</h5>
             </div>

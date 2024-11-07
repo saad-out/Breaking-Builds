@@ -24,7 +24,6 @@ function App() {
             const queue_id = data['body']['info']['queue_id'];
 
             const interval = setInterval(async () => {
-                console.log('Checking build queue state');
                 const data = await getBuildQueueState(queue_id);
                 if (data['body']['state'] === 'left')
                 {
@@ -44,7 +43,6 @@ function App() {
     useEffect(() => {
         if (buildNumber !== -1) {
             const interval = setInterval(async () => {
-                console.log('Fetching build stages');
                 const data = await getBuildStages(buildNumber);
                 setStages(data['body']['stages']);
                 setShowStages(true);

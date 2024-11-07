@@ -44,8 +44,6 @@ const CustomModal = ({ buildNumber, isOpen, onRequestClose, steps }) => {
     }
   };
 
-    console.log("THe steps are: ", steps);
-
   return (
     <Modal show={isOpen} onHide={onRequestClose} centered>
       <Modal.Header closeButton style={{ backgroundColor: color }}>
