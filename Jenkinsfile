@@ -49,5 +49,16 @@ pipeline {
                 '''
             }
         }
+        stage('Only dev')
+        {
+            when {
+                expression {
+                    return env.BRANCH_NAME == 'dev'
+                }
+            steps {
+                echo "Only dev"
+            }
+            }
+        }
     }
 }
