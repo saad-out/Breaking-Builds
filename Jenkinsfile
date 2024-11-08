@@ -4,10 +4,6 @@ pipeline {
             label 'docker-python'
         }
     }
-    triggers {
-        //pollSCM('*/5 * * * *')
-        pollSCM('* * * * *')
-    }
     stages {
         stage ('Setup')
         {
@@ -21,6 +17,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo "Building... for branch ${env.BRANCH_NAME}"
+                // Install dependencies
                 sh '''
                 cd app/backend
                 python3 -m venv venv
@@ -32,6 +29,7 @@ pipeline {
         stage('Test') {
             steps {
                 echo "Testing... for branch ${env.BRANCH_NAME}"
+                // Run tests
                 sh '''
                 cd app/backend
                 source venv/bin/activate
@@ -39,25 +37,42 @@ pipeline {
                 '''
             }
         }
-        stage('Deploy') {
+        stage('Deploy - Mock')
+        {
+            // Mock Deployment for non-dev branches (for testing purposes)
+            when {
+                expression {
+                    return env.BRANCH_NAME != 'dev'
+                }
+            }
             steps {
                 echo "Deploying... for branch ${env.BRANCH_NAME}"
+                // Deploy to mock environment
                 sh '''
                 cd app/backend
                 source venv/bin/activate
-	            echo "Mock deploy"
+                echo "Deploying to mock environment"
                 '''
             }
         }
-        stage('Only dev')
+        stage('Deploy - Production')
         {
+            // Deploy to production for dev branche
             when {
                 expression {
                     return env.BRANCH_NAME == 'dev'
                 }
             }
             steps {
-                echo "Only dev"
+                echo "Deploying... for branch ${env.BRANCH_NAME}"
+                // Deploy to production environment
+                // API hosted on Render, merge dev to main will automatically deploy to production
+                sh '''
+                git checkout main
+                git pull origin main
+                git merge origin/dev
+                git push origin main
+                '''
             }
         }
     }
