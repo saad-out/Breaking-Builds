@@ -8,6 +8,15 @@ pipeline {
         pollSCM('*/5 * * * *')
     }
     stages {
+        stage ('Setup')
+        {
+            steps {
+                script {
+                        // Set default branch to main, if it's null
+                        env.BRANCH_NAME = env.BRANCH_NAME ?: 'main'
+                    }
+            }
+        }
         stage('Build') {
             steps {
                 echo "Building... for branch ${env.BRANCH_NAME}"
