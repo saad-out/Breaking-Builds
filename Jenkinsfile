@@ -12,7 +12,7 @@ pipeline {
         {
             steps {
                 script {
-                        // Set default branch to main, if it's null
+                        // Set default branch to main, if it's not set
                         env.BRANCH_NAME = env.BRANCH_NAME ?: 'main'
                     }
             }
