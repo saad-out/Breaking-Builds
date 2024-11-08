@@ -10,7 +10,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                echo 'Building..'
+                echo 'Building... for branch ${env.BRANCH_NAME}'
                 sh '''
                 cd app/backend
                 python3 -m venv venv
@@ -21,7 +21,7 @@ pipeline {
         }
         stage('Test') {
             steps {
-                echo 'Testing..'
+                echo 'Testing... for branch ${env.BRANCH_NAME}'
                 sh '''
                 cd app/backend
                 source venv/bin/activate
@@ -31,7 +31,7 @@ pipeline {
         }
         stage('Deploy') {
             steps {
-                echo 'Deploying....'
+                echo 'Deploying... for branch ${env.BRANCH_NAME}'
                 sh '''
                 cd app/backend
                 source venv/bin/activate
