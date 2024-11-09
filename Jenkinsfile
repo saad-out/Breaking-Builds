@@ -1,10 +1,10 @@
 pipeline {
-    //agent {
-    //    node {
-    //        label 'docker-python'
-    //    }
-    //}
-    agent any // Use any available agent
+    agent {
+        node {
+            label 'docker-python'
+        }
+    }
+    //agent any // Use any available agent
     stages {
         stage ('Setup')
         {
