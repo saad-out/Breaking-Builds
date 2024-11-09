@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, jsonify
 from flask_cors import CORS
 from dotenv import load_dotenv
 from os import environ
@@ -27,6 +27,15 @@ logging.basicConfig(
 @app.route('/')
 def hello_world():
     return 'Hello, World!!!'
+
+@app.route('/ping')
+def ping():
+    # verify server connection
+    try:
+        server.get_whoami()
+        return jsonify("pong"), 200
+    except Exception:
+        return jsonify("Error connecting to Jenkins server"), 500
 
 if __name__ == "__main__":
     app.run(

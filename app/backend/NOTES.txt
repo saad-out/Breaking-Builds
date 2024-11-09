@@ -7,3 +7,5 @@ limit number of builds for user
 if data persists, then rm volumes (or use new ones)
 to connect with private repo, generate pair keys in jenkins container
 ssh-keyscan github.com >> ~/.ssh/known_hosts and change : Manage Jenkins -> Security -> Known Hosts to First access (or something like that)
+
+Java version should match master and agents
