@@ -43,7 +43,7 @@ const StageCards = ({ buildNumber, stages }) => {
               //     setSteps(steps);
               //     clearInterval(interval);
               // }
-          }, 1000);
+          }, 3000);
       } else if (stage['state'] !== 'FINISHED') {
           setCurrentSteps({"done": false});
       } else {
@@ -70,7 +70,9 @@ const StageCards = ({ buildNumber, stages }) => {
             };
 
             return (
-            <div key={index} className="stage-card" onClick={() => openModal(_stage)} disabled={stageState !== 'FINISHED'}>
+            <div key={index}
+                className={`stage-card ${stageState ? `stage-${stageState.toLowerCase()}` : 'stage-waiting'}`}
+                onClick={() => openModal(_stage)} disabled={stageState !== 'FINISHED'}>
                 <h2 className="stage-title">{stageTitle}</h2>
                 <h5>{stageState !== null ? stageState : 'waiting'}</h5>
             </div>

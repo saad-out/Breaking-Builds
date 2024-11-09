@@ -98,7 +98,7 @@ body {
 
 .stage-card {
   font-family: 'Bangers', cursive;
-  background-color: #3a695d; /* Dark green background */
+  /* background-color: #3a695d; /* Dark green background */
   border-radius: 10px;
   padding: 20px;
   width: 200px; /* Set width for cards */
@@ -107,6 +107,27 @@ body {
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   text-align: center; /* Center text */
 }
+
+.stage-waiting {
+  background-color: #808080; /* Grey for waiting */
+}
+
+.stage-running {
+  background-color: #ffa500; /* Orange for running */
+}
+
+.stage-cancelled {
+  background-color: #ff4500; /* Red for cancelled */
+}
+
+.stage-skipped {
+  background-color: #a9a9a9; /* Light grey for skipped */
+}
+
+.stage-finished {
+  background-color: #3a695d; /* Dark green for finished */
+}
+
 
 .stage-card:hover {
   transform: translateY(-5px); /* Lift effect on hover */
