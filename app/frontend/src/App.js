@@ -3,6 +3,7 @@ import './App.css';
 import StageCards from './StageCards';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {
+    pingServer,
     triggerBuild,
     getBuildQueueState,
     getBuildStages,
@@ -15,12 +16,27 @@ function App() {
     const [stages, setStages] = useState([]); // TODO: load with initial empty data
     const [buildNumber, setBuildNumber] = useState(-1);
     const [triggerButtonState, setTriggerButtonState] = useState('Trigger');
+
+    // First, ping the server to check if Jenkins is up
+    useEffect(() => {
+        const fetchData = async () => {
+            const data = await pingServer();
+            if (data !== "pong") {
+                setTriggerButtonState('Oops! - Jenkins API is down ❌ Try again later');
+            }
+        };
+        fetchData();
+    }, []);
     
     const handleButtonClick = async () => {
         if (triggerButtonState === 'Trigger') {
 
             setTriggerButtonState('Triggering...');
             const data = await triggerBuild();
+                if (data == null) {
+                    setTriggerButtonState('Oops! - Jenkins API is down ❌ Try again later');
+                    return;
+                }
             const queue_id = data['body']['info']['queue_id'];
 
             const interval = setInterval(async () => {
@@ -48,7 +64,7 @@ function App() {
                 setShowStages(true);
                 let allDone = true;
                 for (let stage of data['body']['stages']) {
-                    if (stage['state'] !== 'FINISHED') {
+                    if (stage['state'] !== 'FINISHED' && stage['state'] !== 'CANCELLED' && stage['state'] !== 'SKIPPED') {
                         allDone = false;
                         break;
                     }
@@ -56,7 +72,7 @@ function App() {
                 if (allDone) {
                     clearInterval(interval);
                 }
-            }, 1000);
+            }, 2000);
 
             // Avoid memory leak
             return () => clearInterval(interval);
