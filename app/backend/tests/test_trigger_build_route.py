@@ -1,5 +1,5 @@
 import unittest
-from unittest.mock import patch
+from unittest.mock import patch, MagicMock
 from main import app  # Assuming create_app is the app factory function in your app
 
 class TriggerBuildTestCase(unittest.TestCase):
@@ -15,11 +15,13 @@ class TriggerBuildTestCase(unittest.TestCase):
         cls.app.config['TESTING'] = True
         cls.client = cls.app.test_client()
 
-    @patch("routes.server.build_job")
-    def test_trigger_build_success(self, mock_build_job):
+    @patch("routes.reconnect_to_jenkins")
+    def test_trigger_build_success(self, mock_reconnect_to_jenkins):
         # Mock server.build_job to simulate a successful job trigger
         mock_queue_id = 123
-        mock_build_job.return_value = mock_queue_id
+        mock_server = MagicMock()
+        mock_server.build_job.return_value = mock_queue_id
+        mock_reconnect_to_jenkins.return_value = mock_server
 
         response = self.client.post('/trigger-build')
         json_data = response.get_json()
@@ -37,13 +39,15 @@ class TriggerBuildTestCase(unittest.TestCase):
         #     f"Build triggered for pipeline: {PIPELINE_NAME}, Build queue id: {mock_queue_id}"
         # )
 
-    @patch("routes.server.build_job")
-    def test_trigger_build_jenkins_failure(self, mock_build_job):
+    @patch("routes.reconnect_to_jenkins")
+    def test_trigger_build_jenkins_failure(self, mock_reconnect_to_jenkins):
         # Mock server.build_job to raise a JenkinsException
-        # mock_build_job.side_effect = Exception("Jenkins Error")
         from jenkins import JenkinsException
         msg = "Jenkins Error"
-        mock_build_job.side_effect = JenkinsException(msg)
+        mock_server = MagicMock()
+        mock_server.build_job.side_effect = JenkinsException(msg)
+        mock_reconnect_to_jenkins.return_value = mock_server
+
 
         response = self.client.post('/trigger-build')
         json_data = response.get_json()
@@ -56,12 +60,14 @@ class TriggerBuildTestCase(unittest.TestCase):
         self.assertIn("message", json_data["body"])
         self.assertEqual(f"Error triggering build: {msg}", json_data["body"]["message"])
 
-    @patch("routes.server.build_job")
-    def test_trigger_build_request_failure(self, mock_build_job):
+    @patch("routes.reconnect_to_jenkins")
+    def test_trigger_build_request_failure(self, mock_reconnect_to_jenkins):
         # Mock server.build_job to raise a RequestException
         from requests import RequestException
         msg = "Network error"
-        mock_build_job.side_effect = RequestException(msg)
+        mock_server = MagicMock()
+        mock_server.build_job.side_effect = RequestException(msg)
+        mock_reconnect_to_jenkins.return_value = mock_server
 
         response = self.client.post('/trigger-build')
         json_data = response.get_json()
@@ -74,11 +80,13 @@ class TriggerBuildTestCase(unittest.TestCase):
         self.assertIn("message", json_data["body"])
         self.assertEqual(f"Network error: {msg}", json_data["body"]["message"])
 
-    @patch("routes.server.build_job")
-    def test_trigger_build_timeout(self, mock_build_job):
+    @patch("routes.reconnect_to_jenkins")
+    def test_trigger_build_timeout(self, mock_reconnect_to_jenkins):
         # Mock server.build_job to raise a TimeoutError
         msg = "Request timeout"
-        mock_build_job.side_effect = TimeoutError(msg)
+        mock_server = MagicMock()
+        mock_server.build_job.side_effect = TimeoutError(msg)
+        mock_reconnect_to_jenkins.return_value = mock_server
 
         response = self.client.post('/trigger-build')
         json_data = response.get_json()
@@ -91,11 +99,13 @@ class TriggerBuildTestCase(unittest.TestCase):
         self.assertIn("message", json_data["body"])
         self.assertEqual(f"Request timeout: {msg}", json_data["body"]["message"])
 
-    @patch("routes.server.build_job")
-    def test_trigger_build_unknown_error(self, mock_build_job):
+    @patch("routes.reconnect_to_jenkins")
+    def test_trigger_build_unknown_error(self, mock_reconnect_to_jenkins):
         # Mock server.build_job to raise a generic Exception
         msg = "Unknown error"
-        mock_build_job.side_effect = Exception(msg)
+        mock_server = MagicMock()
+        mock_server.build_job.side_effect = Exception(msg)
+        mock_reconnect_to_jenkins.return_value = mock_server
 
         response = self.client.post('/trigger-build')
         json_data = response.get_json()
