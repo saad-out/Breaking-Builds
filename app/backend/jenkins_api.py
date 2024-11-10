@@ -22,6 +22,15 @@ try:
 except JenkinsException:
     raise Exception(f"Error conneting to Jenkins server: {JENKINS_URL}")
 
+def reconnect_to_jenkins():
+    """
+    Reconnect to Jenkins server
+    """
+    try:
+        return Jenkins(JENKINS_URL, username=JENKINS_USERNAME, password=JENKINS_PASSWORD)
+    except JenkinsException:
+        raise Exception(f"Error conneting to Jenkins server: {JENKINS_URL}")
+
 def wait_for_build_to_start(server: Jenkins, queue_id: int, name: str) -> int:
     """
     Wait for the build to start
