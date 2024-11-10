@@ -4,6 +4,7 @@ from requests.exceptions import RequestException
 import logging
 
 from jenkins_api import (
+    reconnect_to_jenkins,
     server,
     PIPELINE_NAME,
     get_build_stages,
@@ -27,7 +28,8 @@ def trigger_build():
 
     # Trigger the build
     try:
-        queue_item = server.build_job(PIPELINE_NAME)
+        _server = reconnect_to_jenkins()
+        queue_item = _server.build_job(PIPELINE_NAME)
     except JenkinsException as e:
         res["status"] = "failure"
         res["body"]["message"] = f"Error triggering build: {str(e)}"
