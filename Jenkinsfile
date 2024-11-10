@@ -65,15 +65,19 @@ pipeline {
                 }
             }
             steps {
-                echo "Deploying... for branch ${env.BRANCH_NAME}"
-                // Deploy to production environment
-                // API hosted on Render, merge dev to main will automatically deploy to production
-                sh '''
-                git checkout main
-                git pull origin main
-                git merge origin/dev
-                git push origin main
-                '''
+                sshagent (['jk']) {
+                    echo "Deploying... for branch ${env.BRANCH_NAME}"
+                    // Deploy to production environment
+                    // API hosted on Render, merge dev to main will automatically deploy to production
+                    sh '''
+                    git config --global user.name "Jenkins CI"
+                    git config --global user.email "no-reply@jenkins.ci"
+                    git checkout main
+                    git pull origin main
+                    git merge origin/dev
+                    git push origin main
+                    '''
+                }
             }
         }
     }
