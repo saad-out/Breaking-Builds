@@ -64,15 +64,17 @@ pipeline {
                 }
             }
             steps {
-                echo "Deploying... for branch ${env.BRANCH_NAME}"
-                // Deploy to production environment
-                // API hosted on Render, merge dev to main will automatically deploy to production
-                sh '''
-                git checkout main
-                git pull origin main
-                git merge origin/dev
-                git push origin main
-                '''
+                sshagent (['jk']) {
+                    echo "Deploying... for branch ${env.BRANCH_NAME}"
+                    // Deploy to production environment
+                    // API hosted on Render, merge dev to main will automatically deploy to production
+                    sh '''
+                    git checkout main
+                    git pull origin main
+                    git merge origin/dev
+                    git push origin main
+                    '''
+                }
             }
         }
     }
