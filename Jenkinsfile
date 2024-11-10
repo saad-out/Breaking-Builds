@@ -10,7 +10,7 @@ pipeline {
             steps {
                 script {
                         // Set default branch to main, if it's not set
-                        env.BRANCH_NAME = env.BRANCH_NAME ?: 'main'
+                        env.BRANCH_NAME = "${GIT_BRANCH.split("/")[1]}"
                     }
             }
         }
