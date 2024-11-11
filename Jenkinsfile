@@ -64,7 +64,7 @@ pipeline {
                 }
             }
             steps {
-                sshagent (['jk']) {
+                sshagent (['JK']) {
                     echo "Deploying... for branch ${env.BRANCH_NAME}"
                     // Deploy to production environment
                     // API hosted on Render, merge dev to main will automatically deploy to production
