@@ -44,7 +44,8 @@ The backend, built with Flask, connects to Jenkins via its API, enabling actions
 ### Frontend (React)
 
 The frontend, built with React, allows users to view the build logs and see the progress of each pipeline stage live. Users trigger builds manually through the web interface, simulating the pipeline for a more interactive experience. Each stage is displayed hierarchically, showing detailed logs as the build progresses.
-Jenkins Pipeline
+
+### Jenkins Pipeline
 
 The Jenkins pipeline, defined in a `Jenkinsfile`, is configured to automate builds, testing, and deployments. It is triggered in two main ways:
 
