@@ -81,4 +81,16 @@ pipeline {
             }
         }
     }
+    post
+    {
+        success {
+            echo 'Build and deployment successful!'
+        }
+        failure {
+            echo 'Build failed, check Jenkins logs.'
+        }
+        aborted {
+            echo 'Build aborted!'
+        }
+    }
 }
