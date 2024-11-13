@@ -67,7 +67,8 @@ The Jenkins setup for Breaking-Builds is configured to support Docker-based buil
 
 #### 1. **Jenkins Master**
 
-The Jenkins master is hosted on a cloud server, configured specifically for personal use. It controls the CI/CD pipeline by orchestrating Docker agents that run the build, test, and deployment stages. The master instance connects securely to GitHub for source code management.
+The Jenkins master is built from a `Dockerfile` based on `jenkins/jenkins:2.414.2-jdk11`, with additional tools and plugins installed.
+To connect the master container to its Docker cloud host, an **Alpine socat** container is used, establishing a secure communication channel.
 
 #### 2. **Docker Agent**
 
